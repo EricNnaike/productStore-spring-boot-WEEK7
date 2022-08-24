@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${pageTitle}]]</title>
+</head>
+<body>
+<form th:action="@{/save}" method="POST" th:object="${user}">
+    <div class="container">
+
+        <div th:if="${message}">
+            <div class="alert alert-info">
+                [[${message}]]
+            </div>
+        </div>
+
+        <h1>[[${pageTitle}]]</h1>
+
+        <input type="hidden" th:field="*{id}">
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" id="email" th:field="*{email}" required>
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" id="psw" th:field="*{password}" required>
+
+        <hr>
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="name" name="name" id="name" th:field="*{name}" required>
+        <hr>
+
+        <hr>
+        <label for="name"><b>Enable</b></label>
+        <input type="checkbox"  th:field="*{enabled}" required>
+
+        <button type="submit" class="">Save</button>
+        <button type="submit" class="" onclick="cancelForm()">Cancel</button>
+    </div>
+
+    <script>
+        function cancelForm() {
+            window.location = "[[@{/users}]]"
+        }
+    </script>
+
+</form>
+</body>
+</html>
