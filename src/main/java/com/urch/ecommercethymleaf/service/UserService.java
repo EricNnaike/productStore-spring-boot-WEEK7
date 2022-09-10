@@ -10,7 +10,6 @@ import java.util.List;
 public interface UserService {
     User getUserByEmail(String email, String password);
     User registerUser(User user);
-    Product addNewProduct(Product product);
     List<User> getAllUsers();
     User getUserById(Long id) throws UserNotFoundException;
     void deleteUserById(Long id) throws UserNotFoundException;

@@ -28,16 +28,27 @@ public class UserController {
 
     //PROCESS LOGIN FORM
     @PostMapping("/processLogin")
-    public String processLogin(HttpSession session, @ModelAttribute UserDto userdto, Model model) {
-        User userToBeLoggedIn;
-        try {
-            userToBeLoggedIn = userService.getUserByEmail(userdto.getEmail(), userdto.getPassword());
-            session.setAttribute("user", userToBeLoggedIn);
-        } catch (RuntimeException e) {
-            model.addAttribute("invalid", e.getMessage());
-            return "redirect:/login";
+    public ModelAndView processLogin(HttpSession session, @RequestParam String password, @ModelAttribute UserDto userdto, Model model) {
+        User user = userService.getUserByEmail(userdto.getEmail(), userdto.getPassword());
+
+        if (user != null) {
+            ModelAndView mav;
+            if(user.getEmail().endsWith("store.com") && user.getPassword().equals(password)) {
+                mav = new ModelAndView("dashboard");
+                mav.addObject("user", user);
+                mav.addObject("email", userdto.getEmail());
+                return mav;
+            }else {
+                mav = new ModelAndView("home");
+                mav.addObject("user", user);
+                mav.addObject("user", userdto.getEmail());
+                return mav;
+            }
+
+        }else {
+            return new ModelAndView("registerForm");
         }
-        return "dashboard";
+
     }
 
     //GET REGISTER FORM
@@ -49,7 +60,7 @@ public class UserController {
 
     //PROCESS REGISTER FORM
     @PostMapping("/processRegister")
-    public String processRegister(@ModelAttribute User user, Model model, RedirectAttributes re){
+    public String processRegister(@ModelAttribute("user") User user, Model model, RedirectAttributes re){
         User newUser = userService.registerUser(user);
         model.addAttribute("success", newUser.getName() + " is registered successfully");
         re.addFlashAttribute("message", "User has been registered successfully");
@@ -96,9 +107,10 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id, RedirectAttributes re) {
+    public String deleteUserss(@PathVariable("id") Long id, RedirectAttributes re) {
         try {
             userService.deleteUserById(id);
+            re.addFlashAttribute("The user with id " +id+ "has been deleted");
         }catch(UserNotFoundException e) {
             re.addFlashAttribute("message", e.getMessage());
         }

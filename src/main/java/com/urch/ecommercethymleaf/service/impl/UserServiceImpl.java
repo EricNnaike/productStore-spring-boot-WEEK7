@@ -59,11 +59,6 @@ public class UserServiceImpl implements UserService {
         userRepo.deleteById(id);
     }
 
-    @Override
-    public Product addNewProduct(Product product) { //METHOD FOR ADDING NEW PRODUCT
-        Product productItems = productRepo.save(product);
-        return productItems;
-    }
 
 
 

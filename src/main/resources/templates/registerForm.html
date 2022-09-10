@@ -6,6 +6,11 @@
 </head>
 <body>
 <form th:action="@{/processRegister}" method="POST" th:object="${user}">
+    <DIV th:if="${success}">
+        <div>
+            [[${success}]]
+        </div>
+    </DIV>
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
